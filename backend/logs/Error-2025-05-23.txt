@@ -1,0 +1,8 @@
+{"level":"error","message":"400 - Error: Important Fields are required.","timestamp":"2025-05-23 12:16:46"}
+{"level":"error","message":"400 - Error: User is not defined","timestamp":"2025-05-23 12:19:03"}
+{"level":"error","message":"400 - Error: User is not defined","timestamp":"2025-05-23 12:20:29"}
+{"level":"error","message":"400 - Error: User is not defined","timestamp":"2025-05-23 12:21:09"}
+{"level":"error","message":"400 - Error: User is not defined","timestamp":"2025-05-23 12:21:14"}
+{"level":"error","message":"400 - Error: TypeError: Cannot destructure property 'email' of 'req.body' as it is undefined.","timestamp":"2025-05-23 12:22:58"}
+{"level":"error","message":"400 - Error: TypeError: Cannot destructure property 'email' of 'req.body' as it is undefined.","timestamp":"2025-05-23 12:23:35"}
+{"level":"error","message":"400 - Error: Content Not Generated","timestamp":"2025-05-23 12:39:34"}

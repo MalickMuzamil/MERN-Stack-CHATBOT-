@@ -1,0 +1,7 @@
+{"level":"error","message":"400 - Error: Important Fields are required.","timestamp":"2025-05-26 12:29:12"}
+{"level":"error","message":"400 - Error: Error: Invalid password","timestamp":"2025-05-26 12:56:29"}
+{"level":"error","message":"400 - Error: Error: Invalid password","timestamp":"2025-05-26 12:57:54"}
+{"level":"error","message":"400 - Error: Error: Invalid password","timestamp":"2025-05-26 13:05:18"}
+{"level":"error","message":"400 - Error: Content Not Generated","timestamp":"2025-05-26 18:20:47"}
+{"level":"error","message":"400 - Error: Content Not Generated","timestamp":"2025-05-26 18:33:13"}
+{"level":"error","message":"400 - Error: Error: User not found or has been deleted","timestamp":"2025-05-26 20:34:41"}

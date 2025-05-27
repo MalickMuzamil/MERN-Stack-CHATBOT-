@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\T7-1\\Desktop\\ChatBot\\Backend\\logs\\.279c11da40cd4bfc54d825930373215da50cf9c6-audit.json",
+    "files": [
+        {
+            "date": 1747921851362,
+            "name": "C:\\Users\\T7-1\\Desktop\\ChatBot\\Backend\\logs\\Error-2025-05-22.txt",
+            "hash": "bc29572d8738f475f96e3e8da69e4645f7c0b93ca815b9ae0c119145c7ff79c9"
+        },
+        {
+            "date": 1747982461749,
+            "name": "C:\\Users\\T7-1\\Desktop\\ChatBot\\Backend\\logs\\Error-2025-05-23.txt",
+            "hash": "fc7418da9d44c11fb100bd8cfad7fc2efc179739a1442cb4f365400486d9216e"
+        },
+        {
+            "date": 1748241206915,
+            "name": "C:\\Users\\T7-1\\Desktop\\ChatBot\\Backend\\logs\\Error-2025-05-26.txt",
+            "hash": "d76047a9960399d4414098ce3c80180dafd679088fbe6c0b25aacabb40ff7919"
+        }
+    ],
+    "hashType": "sha256"
+}

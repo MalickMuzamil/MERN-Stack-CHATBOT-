@@ -1,0 +1,2 @@
+{"level":"error","message":"400 - Error: Api not working","timestamp":"2025-05-22 19:18:35"}
+{"level":"error","message":"400 - Error: Api not working","timestamp":"2025-05-22 19:30:54"}
