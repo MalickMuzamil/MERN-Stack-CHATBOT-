@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\T7-1\\Desktop\\Mern Stack Project\\MERN-Stack-CHATBOT-\\backend\\logs\\.38df00b28067387d77de0f747e5c60fc123217e4-audit.json",
+    "files": [
+        {
+            "date": 1748332284600,
+            "name": "C:\\Users\\T7-1\\Desktop\\Mern Stack Project\\MERN-Stack-CHATBOT-\\backend\\logs\\Error-2025-05-27.txt",
+            "hash": "b7ef452bd64c6a294e4d5626094c8aa8be02722d5915f7a3647476ef0485ada4"
+        }
+    ],
+    "hashType": "sha256"
+}

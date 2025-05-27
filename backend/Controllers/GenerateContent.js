@@ -10,9 +10,9 @@ class GenerateContent extends AuthController {
     static GenerateContent = asyncHandler(async (req, res) => {
         const { prompt, userId, chatId } = req.body;
 
-        if (!prompt) {
+        if (!prompt || !userId) {
             res.status(400);
-            throw new Error("Prompt is required");
+            throw new Error("Prompt and User ID are required");
         }
 
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -29,7 +29,17 @@ class GenerateContent extends AuthController {
                 res.status(404);
                 throw new Error("Chat not found");
             }
+        }
 
+        else {
+            const oneHourAgo = new Date(Date.now() - 1000 * 60 * 60);
+            chat = await ChatModel.findOne({
+                userId,
+                updatedAt: { $gte: oneHourAgo }
+            }).sort({ updatedAt: -1 });
+        }
+
+        if (chat) {
             chat.messages.push(
                 { sender: "user", content: prompt },
                 { sender: "ai", content: generatedContent }
@@ -51,50 +61,50 @@ class GenerateContent extends AuthController {
     });
 
     static getGeneratedContent = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+        const { id } = req.params;
 
-    if (!id) {
-        res.status(400);
-        throw new Error('User ID is required');
-    }
+        if (!id) {
+            res.status(400);
+            throw new Error('User ID is required');
+        }
 
-    const chats = await ChatModel.find({ userId: id }).sort({ createdAt: -1 });
+        const chats = await ChatModel.find({ userId: id }).sort({ createdAt: -1 });
 
-    if (!chats || chats.length === 0) {
-        res.status(404);
-        throw new Error('No chats found for this user');
-    }
+        if (!chats || chats.length === 0) {
+            res.status(404);
+            throw new Error('No chats found for this user');
+        }
 
-    return res.status(200).json(
-        this.generateResponse(200, 'Chats fetched successfully', chats)
-    );
-});
+        return res.status(200).json(
+            this.generateResponse(200, 'Chats fetched successfully', chats)
+        );
+    });
 
-
-    static DeletedGeneratedContent = asyncHandler(async (req, res) => {
+    static DeleteChatById = asyncHandler(async (req, res) => {
         try {
             const { id } = req.params;
 
             if (!id) {
-                res.status(401);
-                throw new Error('Given Id is not a Valid')
+                res.status(400);
+                throw new Error('Chat ID is required');
             }
 
-            const DeletedChatModel = await ChatModel.deleteMany({ userId: id });
+            const deleted = await ChatModel.findByIdAndDelete(id);
 
-            if (DeletedChatModel.deletedCount === 0) {
+            if (!deleted) {
                 res.status(404);
-                throw new Error('No Chats found for this user')
+                throw new Error('Chat not found');
             }
 
-            res.status(200).json(this.generateResponse(200, `${DeletedChatModel.deletedCount} chats deleted successfully`))
-        }
-
+            res.status(200).json(this.generateResponse(200, 'Chat deleted successfully'));
+        } 
+        
         catch (error) {
             res.status(400);
-            throw new Error("Error fetching content: " + error.message);
+            throw new Error("Error deleting chat: " + error.message);
         }
     });
+
 }
 
 export default GenerateContent;
