@@ -3,26 +3,30 @@ import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
+interface Message {
+    sender: 'user' | 'ai';
+    content: string;
+    _id: string;
+    timestamp: string;
+}
+
 interface ContentItem {
-    id: string;
-    prompt: string;
-    response: string;
+    _id: string;
+    prompt?: string;
+    response?: string;
+    messages?: Message[];
 }
 
 interface ChatData {
     _id: string;
     title: string;
-    messages: {
-        sender: 'user' | 'ai';
-        content: string;
-        _id: string;
-        timestamp: string;
-    }[];
+    messages: Message[];
 }
 
 interface ContentState {
     contents: ContentItem[];
     currentChat: ChatData | null;
+    currentChatId: string | null;
     loading: boolean;
     error: string | null;
 }
@@ -30,102 +34,61 @@ interface ContentState {
 const initialState: ContentState = {
     contents: [],
     currentChat: null,
+    currentChatId: null,
     loading: false,
     error: null,
 };
 
+// Generate content
 export const generateContent = createAsyncThunk(
     'content/generate',
     async (data: { prompt: string; chatId?: string | null }, thunkAPI) => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
 
-        if (!token) {
-            return thunkAPI.rejectWithValue('User not authenticated. Token missing.');
-        }
-
-        if (!userId) {
-            return thunkAPI.rejectWithValue('User ID is missing.');
-        }
+        if (!token) return thunkAPI.rejectWithValue('User not authenticated.');
+        if (!userId) return thunkAPI.rejectWithValue('User ID missing.');
 
         try {
-            const payload = {
-                ...data,
-                userId: userId
-            };
-
             const res = await axios.post(
                 `${BASE_URL}/generate-content`,
-                payload,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+                { ...data, userId },
+                { headers: { Authorization: `Bearer ${token}` } }
             );
-
             return res.data;
-        }
-
-        catch (error: any) {
+        } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
         }
     }
 );
 
+// Fetch all contents
 export const fetchContents = createAsyncThunk(
     'content/fetchContents',
     async (_, thunkAPI) => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
 
-        if (!token) {
-            return thunkAPI.rejectWithValue('User not authenticated. Token missing.');
-        }
-
-        if (!userId) {
-            return thunkAPI.rejectWithValue('User ID is missing.');
-        }
+        if (!token) return thunkAPI.rejectWithValue('User not authenticated.');
+        if (!userId) return thunkAPI.rejectWithValue('User ID missing.');
 
         try {
             const res = await axios.get(`${BASE_URL}/generate-content/user/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
-
-            // Defensive: ensure data.data is an array, else return empty array
-            if (Array.isArray(res.data.data)) {
-                return res.data.data;
-            } else {
-                console.warn('fetchContents: API response data.data is not an array:', res.data.data);
-                return [];
-            }
-        } 
-        
-        catch (error: any) {
-            return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
-        }
-    }
-);
-
-export const fetchChatById = createAsyncThunk(
-    'content/fetchChatById',
-    async (chatId: string, thunkAPI) => {
-        try {
-            const res = await axios.get(`${BASE_URL}/generate-content/${chatId}`);
-            return res.data; // expects { messages, title, _id }
+            return Array.isArray(res.data.data) ? res.data.data : [];
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
         }
     }
 );
 
-export const updateContent = createAsyncThunk(
-    'content/update',
-    async (data: { id: string; prompt: string }, thunkAPI) => {
+// Fetch a chat by ID
+export const fetchChatById = createAsyncThunk(
+    'content/fetchChatById',
+    async (chatId: string, thunkAPI) => {
         try {
-            const res = await axios.put(`${BASE_URL}/generate-content/${data.id}`, { prompt: data.prompt });
+            const res = await axios.get(`${BASE_URL}/generate-content/${chatId}`);
             return res.data;
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
@@ -133,12 +96,14 @@ export const updateContent = createAsyncThunk(
     }
 );
 
-export const deleteContent = createAsyncThunk(
-    'content/delete',
-    async (id: string, thunkAPI) => {
+// Delete chat by ID
+export const deleteChatById = createAsyncThunk(
+    'content/deleteChatById',
+    async (chatId: string, thunkAPI) => {
         try {
-            await axios.delete(`${BASE_URL}/generate-content/${id}`);
-            return id;
+            const res = await axios.delete(`${BASE_URL}/generate-content/delete-chat/${chatId}`);
+            if (!res || res.status !== 200) throw new Error('Failed to delete chat');
+            return chatId;
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
         }
@@ -149,9 +114,18 @@ export const deleteContent = createAsyncThunk(
 const contentSlice = createSlice({
     name: 'content',
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrentChatId: (state, action) => {
+            state.currentChatId = action.payload;
+        },
+        resetCurrentChatId: (state) => {
+            state.currentChatId = null;
+            state.currentChat = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
+            // Generate content
             .addCase(generateContent.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -159,31 +133,30 @@ const contentSlice = createSlice({
             .addCase(generateContent.fulfilled, (state, action) => {
                 state.loading = false;
                 state.contents.push(action.payload);
+                state.currentChat = action.payload;
+                state.currentChatId = action.payload.data?._id || null;
             })
             .addCase(generateContent.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
 
+            // Fetch contents
             .addCase(fetchContents.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(fetchContents.fulfilled, (state, action) => {
                 state.loading = false;
-                if (Array.isArray(action.payload)) {
-                    state.contents = action.payload;
-                } else {
-                    console.warn('fetchContents.fulfilled payload is not array:', action.payload);
-                    state.contents = [];
-                }
+                state.contents = action.payload;
             })
             .addCase(fetchContents.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
-                state.contents = []; // clear contents on error
+                state.contents = [];
             })
 
+            // Fetch single chat
             .addCase(fetchChatById.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -191,29 +164,22 @@ const contentSlice = createSlice({
             .addCase(fetchChatById.fulfilled, (state, action) => {
                 state.loading = false;
                 state.currentChat = action.payload;
+                state.currentChatId = action.payload?._id || null;
             })
             .addCase(fetchChatById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
 
-            .addCase(updateContent.fulfilled, (state, action) => {
-                const index = state.contents.findIndex(item => item.id === action.payload.id);
-                if (index !== -1) {
-                    state.contents[index] = action.payload;
-                }
+            // Delete chat
+            .addCase(deleteChatById.fulfilled, (state, action) => {
+                state.contents = state.contents.filter(item => item._id !== action.payload);
             })
-            .addCase(updateContent.rejected, (state, action) => {
-                state.error = action.payload as string;
-            })
-
-            .addCase(deleteContent.fulfilled, (state, action) => {
-                state.contents = state.contents.filter(item => item.id !== action.payload);
-            })
-            .addCase(deleteContent.rejected, (state, action) => {
+            .addCase(deleteChatById.rejected, (state, action) => {
                 state.error = action.payload as string;
             });
     },
 });
 
 export default contentSlice.reducer;
+export const { setCurrentChatId, resetCurrentChatId } = contentSlice.actions;

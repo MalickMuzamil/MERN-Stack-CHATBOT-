@@ -4,3 +4,16 @@ html,
 body {
   @apply bg-white dark:bg-gray-950;
 }
+
+
+/* tailwind.css */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #f86009;
+  border-radius: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}

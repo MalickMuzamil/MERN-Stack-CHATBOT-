@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointUp } from "@fortawesome/free-regular-svg-icons";
 import { useState, useRef } from "react";
+import '../../app.css';
 import type { AppDispatch } from '../../../Redux/store/index';
 import { useDispatch } from 'react-redux';
 import { faPaperPlane, faPlus, faCode, faLightbulb, faEnvelopeOpenText, } from "@fortawesome/free-solid-svg-icons";
-import { generateContent } from '../../../Redux/features/generatecontent/generatecontent'
+import { generateContent, fetchContents } from '../../../Redux/features/generatecontent/generatecontent'
 
 export default function chat() {
     const [message, setMessage] = useState("");
@@ -35,6 +36,7 @@ export default function chat() {
             }));
 
             setChatHistory(updatedHistory);
+            dispatch(fetchContents());
         }
 
         catch (error) {
@@ -48,8 +50,6 @@ export default function chat() {
         setShowInitialCards(false);
         setLoading(false);
     };
-
-
 
     const handleFileClick = () => {
         if (fileInputRef.current) {
@@ -76,7 +76,7 @@ export default function chat() {
                     </button>
                 </header>
 
-                <div className="flex-1 overflow-auto p-4 bg-[#1a1a1a] mb-4">
+                <div className="flex-1 overflow-auto p-4 bg-[#1a1a1a] mb-4 custom-scrollbar" >
                     {showInitialCards ? (
                         <div className="flex flex-col md:flex-row items-center justify-center h-full gap-4">
 
