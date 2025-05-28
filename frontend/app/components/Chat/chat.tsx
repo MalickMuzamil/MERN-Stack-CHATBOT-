@@ -96,8 +96,8 @@ export default function Chat({ chatId }: ChatProps) {
     return (
         <>
 
-            <main className="flex-1 pb-7 px-5 pt-3 bg-[#1a1a1a] flex flex-col">
-                <header className="border-b text-gray-600 pb-[19px] mb-4 flex items-center justify-between">
+            <main className="flex-1 pb-7 px-5 pt-3 bg-[#1a1a1a] flex flex-col min-h-screen">
+                <header className="flex items-center justify-between">
                     <h2 className="text-2xl font-semibold text-white text-center mx-auto md:mx-0 md:text-left md:flex-1">
                         AI Chat
                     </h2>
@@ -109,9 +109,11 @@ export default function Chat({ chatId }: ChatProps) {
                         />
                         <span>Upgrade</span>
                     </button>
-                </header>
 
-                <div className="flex-1 overflow-auto p-4 bg-[#1a1a1a] mb-4 custom-scrollbar" >
+                </header>
+                    <div className="w-full h-px bg-gray-600 my-5 mb-4 "></div>
+
+                <div className="flex-1 overflow-y-auto p-4 bg-[#1a1a1a] mb-4 custom-scrollbar" >
                     {showInitialCards ? (
                         <div className="flex flex-col md:flex-row items-center justify-center h-full gap-4">
                             <div className="bg-[#242424] text-white p-4 rounded-xl shadow-lg w-full max-w-md flex items-center gap-3">

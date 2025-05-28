@@ -79,7 +79,9 @@ export const generateNewChatContent = createAsyncThunk(
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             return res.data;
-        } catch (error: any) {
+        } 
+        
+        catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
         }
     }

@@ -5,7 +5,8 @@ import { faCommentDots, faPlus, faEllipsisV, faTrash } from "@fortawesome/free-s
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../../Redux/store';
-import { fetchContents, fetchChatById, setCurrentChatId, resetCurrentChatId, deleteChatById } from '../../../Redux/features/generatecontent/generatecontent';
+import { fetchContents, setCurrentChatId, resetCurrentChatId, deleteChatById } from '../../../Redux/features/generatecontent/generatecontent';
+import Modal from '../ui/Modal/modal';
 
 export default function History() {
     const dispatch = useDispatch<AppDispatch>();
@@ -87,13 +88,13 @@ export default function History() {
 
                                 {menuOpenId === chat._id && (
                                     <div className="absolute right-0 mt-2 w-28 bg-[#2a2a2a] border border-gray-600 rounded shadow-lg z-10 cursor-pointer">
-                                        <button
-                                            onClick={() => handleDeleteChat(chat._id)}
-                                            className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-[#3a3a3a] flex items-center gap-2 cursor-pointer"
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                            Delete
-                                        </button>
+                                        <Modal
+                                            title="Delete Chat"
+                                            message="Are you sure you want to delete this chat?"
+                                            onConfirm={() => handleDeleteChat(chat._id)}
+                                            triggerLabel="Delete"
+                                            icon={<FontAwesomeIcon icon={faTrash} />}
+                                        />
                                     </div>
                                 )}
                             </div>

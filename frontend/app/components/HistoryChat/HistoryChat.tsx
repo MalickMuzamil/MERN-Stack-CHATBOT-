@@ -9,8 +9,6 @@ export default function HistoryChat() {
   const [showHistoryPanel, setShowHistoryPanel] = useState(false);
   const { id: chatId } = useParams();
 
-  console.log('ChatID in Chat History Component:', chatId);
-
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
       <div className="hidden md:block w-64 bg-[#1a1a1a]">

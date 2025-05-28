@@ -63,13 +63,14 @@ export default function login() {
         try {
             const result = await dispatch(loginUser(formData)).unwrap();
             toast.success("Login successful!", { position: "top-center" });
-            navigate("/home");
-        } 
-        
-        catch (err: any) {
-            toast.error(err || "Login failed. Please try again.", {
-                position: "top-right",
-            });
+
+            setTimeout(() => {
+                navigate("/home");
+            }, 2500);
+        }
+
+        catch (error) {
+            toast.error("Login failed!", { position: "top-center" });
         }
     };
 

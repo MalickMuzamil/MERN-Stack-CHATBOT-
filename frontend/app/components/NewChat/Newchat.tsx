@@ -5,12 +5,16 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from '../../../Redux/store';
 import { useNavigate } from "react-router-dom";
 import { generateNewChatContent } from "../../../Redux/features/generatecontent/generatecontent";
+import { useParams } from "react-router-dom";
 
 export default function Newchat() {
     const [message, setMessage] = useState("");
     const [chatHistory, setChatHistory] = useState<{ type: "user" | "ai"; message: string }[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+     const { chatId } = useParams();
+
+     console.log('Chat ki runtime id ye ha:', chatId)
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
