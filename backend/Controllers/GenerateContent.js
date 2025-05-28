@@ -60,6 +60,31 @@ class GenerateContent extends AuthController {
         res.status(200).json(this.generateResponse(200, "Generated Content", chat));
     });
 
+    static GenerateNewChatContent = asyncHandler(async (req, res) => {
+        const { prompt, userId } = req.body;
+
+        if (!prompt || !userId) {
+            res.status(400);
+            throw new Error("Prompt and User ID are required");
+        }
+
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent(prompt);
+        const generatedContent = result.response ? result.response.text() : "No content generated";
+
+        const chat = await ChatModel.create({
+            userId,
+            messages: [
+                { sender: "user", content: prompt },
+                { sender: "ai", content: generatedContent }
+            ]
+        });
+
+        res.status(200).json(this.generateResponse(200, "New Chat Created", chat));
+    });
+
     static getGeneratedContent = asyncHandler(async (req, res) => {
         const { id } = req.params;
 
@@ -80,6 +105,26 @@ class GenerateContent extends AuthController {
         );
     });
 
+    static getChatById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+
+        if (!id) {
+            res.status(400);
+            throw new Error('Chat ID is required');
+        }
+
+        const chat = await ChatModel.findById(id);
+
+        if (!chat) {
+            res.status(404);
+            throw new Error('Chat not found');
+        }
+
+        return res.status(200).json(
+            this.generateResponse(200, 'Chat fetched successfully', chat)
+        );
+    });
+
     static DeleteChatById = asyncHandler(async (req, res) => {
         try {
             const { id } = req.params;
@@ -97,8 +142,8 @@ class GenerateContent extends AuthController {
             }
 
             res.status(200).json(this.generateResponse(200, 'Chat deleted successfully'));
-        } 
-        
+        }
+
         catch (error) {
             res.status(400);
             throw new Error("Error deleting chat: " + error.message);
