@@ -5,6 +5,7 @@ export default [
   route("signup", "./Authentication/Signup/signup.tsx"),
 
   route("", "./Layout/ProtectedRoute.tsx", [
-    route("home", "./routes/home.tsx"),
+    route("home", "./routes/home.tsx"),        
+    route("home/:id", "./components/HistoryChat/HistoryChat.tsx"),    
   ]),
 ];

@@ -8,7 +8,6 @@ export const store = configureStore({
     signup: signupReducer,
     login: loginReducer,
     content: generateContent,
-    
   },
 })
 

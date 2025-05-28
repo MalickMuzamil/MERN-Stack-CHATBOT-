@@ -8,6 +8,8 @@ import {
 } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "../Redux/store/index";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -45,8 +47,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 const App = () => (
   <Provider store={store}>
-    <Outlet />
+    <>
+      <Outlet />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+    </>
   </Provider>
+
 );
 
 export default App;

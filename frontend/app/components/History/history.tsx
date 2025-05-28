@@ -11,25 +11,25 @@ export default function History() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const { contents, currentChatId } = useSelector((state: RootState) => state.content);
-    const [menuOpenId, setMenuOpenId] = useState<string | null>(null); // track open menu
+    const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
+    const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
     useEffect(() => {
         dispatch(fetchContents());
     }, [dispatch]);
 
     const handleChatClick = (chatId: string) => {
-        dispatch(fetchChatById(chatId));
+        setActiveChatId(chatId);
         dispatch(setCurrentChatId(chatId));
-        navigate(`/chat/${chatId}`);
+        navigate(`/home/${chatId}`);
     };
 
     const handleNewChat = () => {
         dispatch(resetCurrentChatId());
-        navigate(`/chat/new`);
+        navigate(`/home/new`);
     };
 
     const handleDeleteChat = (chatId: string) => {
-        console.log("Delete chat", chatId);
         dispatch(deleteChatById(chatId));
         setMenuOpenId(null);
     };
@@ -39,13 +39,18 @@ export default function History() {
             index === self.findIndex((c) => (c as any)._id === (chat as any)._id)
     );
 
+
     return (
         <aside className="w-full md:w-64 bg-[#1a1a1a] md:p-4 py-4 h-full md:border-l border-gray-700 flex flex-col">
-            <h2 className="text-xl font-bold mb-6 text-white flex justify-between items-center">
+            <h2 className="text-xl font-bold mb-[9px] text-white flex justify-between items-center">
                 Chat Bot AI
-                <button onClick={handleNewChat} className="text-sm text-[#f86009]">
+                <button
+                    onClick={handleNewChat}
+                    className="text-sm text-[#f86009] cursor-pointer hover:bg-[#333] px-2 py-1 rounded-[5px]"
+                >
                     <FontAwesomeIcon icon={faPlus} /> New
                 </button>
+
             </h2>
 
             <div className="w-full h-px bg-gray-600 my-4"></div>
@@ -55,13 +60,11 @@ export default function History() {
                     {uniqueChats.map((chat: any) => (
                         <li
                             key={chat._id}
-                            className={`mb-4 p-2 rounded cursor-pointer flex items-start justify-between gap-2 text-white ${currentChatId === chat._id
-                                ? "bg-[#f86009]"
-                                : "hover:bg-[#333]"
+                            className={`mb-4 p-2 rounded cursor-pointer flex items-start justify-between gap-2 text-white hover:bg-[#333]  ${activeChatId === chat._id ? "bg-[#f86009]" : ""
                                 }`}
                         >
                             <div
-                                className="flex-1 flex gap-2 items-center"
+                                className={`flex-1 flex gap-2 items-center cursor-pointer`}
                                 onClick={() => handleChatClick(chat._id)}
                             >
                                 <FontAwesomeIcon icon={faCommentDots} className="w-4 h-4" />
@@ -74,9 +77,11 @@ export default function History() {
                             </div>
 
                             <div className="relative">
-                                <button onClick={() =>
-                                    setMenuOpenId(menuOpenId === chat._id ? null : chat._id)
-                                }>
+                                <button
+                                    onClick={() =>
+                                        setMenuOpenId(menuOpenId === chat._id ? null : chat._id)
+                                    }
+                                >
                                     <FontAwesomeIcon icon={faEllipsisV} className="w-4 h-4 cursor-pointer" />
                                 </button>
 
@@ -94,6 +99,7 @@ export default function History() {
                             </div>
                         </li>
                     ))}
+
                 </ul>
             </div>
         </aside>

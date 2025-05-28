@@ -1,51 +1,57 @@
-import Sidebar from "./../components/Sidebar/sidebar";
-import Chat from "./../components/Chat/chat";
-import History from "./../components/History/history";
 import { useState } from "react";
+import Sidebar from "../components/Sidebar/sidebar";
+import Chat from "../components/Chat/chat";
+import History from "../components/History/history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
+import NewChatPrompt from '../components/NewChat/Newchat';
 
 export function meta() {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "ECHOAI" },
+    { name: "description", content: "Welcome to EchoAI!" },
   ];
 }
 
 export default function Home() {
   const [showHistoryPanel, setShowHistoryPanel] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { id: chatId } = useParams();
+  console.log("Current chatId from URL:", chatId);
+
   return (
-    <div className="flex h-screen bg-gray-100 relative">
-      <Sidebar setShowHistoryPanel={setShowHistoryPanel} />
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      <div className="hidden md:block w-64">
+        <Sidebar
+          setShowHistoryPanel={setShowHistoryPanel}
+          showHistoryPanel={showHistoryPanel}
+          isMobile={false}
+        />
+      </div>
 
-      <Chat />
+      <div className="flex flex-col flex-1 relative">
 
-      <div className="hidden md:block">
+        {chatId === 'new' ? (
+          <NewChatPrompt />
+        ) : (
+          <Chat chatId={chatId} />
+        )}
+      </div>
+
+      <div className="hidden md:block w-64 bg-[#1a1a1a] border-l border-gray-700">
         <History />
       </div>
 
-      {showHistoryPanel && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50"
-            onClick={() => setShowHistoryPanel(false)}
-          ></div>
-
-          <aside
-            className={`fixed right-0 top-0 w-64 h-full bg-[#1a1a1a] p-4 shadow-lg overflow-auto z-50 transform transition-all duration-300 ease-in-out ${showHistoryPanel ? "translate-x-0 scale-100" : "translate-x-full scale-90"}`}
-          >
-            <button
-              className="text-white mb-1 md:hidden z-50 bg-gray-800 text-white p-2 rounded"
-              onClick={() => setShowHistoryPanel(false)}
-            >
-              <FontAwesomeIcon icon={faTimes} />
-            </button>
-            <History />
-          </aside>
-
-        </div>
-      )}
+      <div className="md:hidden">
+        <Sidebar
+          setShowHistoryPanel={setShowHistoryPanel}
+          showHistoryPanel={showHistoryPanel}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          isMobile={true}
+        />
+      </div>
     </div>
   );
 }

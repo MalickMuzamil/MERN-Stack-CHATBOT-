@@ -62,6 +62,29 @@ export const generateContent = createAsyncThunk(
     }
 );
 
+// Generate new chat content (always create new chat)
+export const generateNewChatContent = createAsyncThunk(
+    'content/generateNewChat',
+    async (data: { prompt: string }, thunkAPI) => {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+
+        if (!token) return thunkAPI.rejectWithValue('User not authenticated.');
+        if (!userId) return thunkAPI.rejectWithValue('User ID missing.');
+
+        try {
+            const res = await axios.post(
+                `${BASE_URL}/generate-content/new`,
+                { ...data, userId },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            return res.data;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+        }
+    }
+);
+
 // Fetch all contents
 export const fetchContents = createAsyncThunk(
     'content/fetchContents',
@@ -88,7 +111,7 @@ export const fetchChatById = createAsyncThunk(
     'content/fetchChatById',
     async (chatId: string, thunkAPI) => {
         try {
-            const res = await axios.get(`${BASE_URL}/generate-content/${chatId}`);
+            const res = await axios.get(`${BASE_URL}/generate-content/user/chat/${chatId}`);
             return res.data;
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
@@ -137,6 +160,22 @@ const contentSlice = createSlice({
                 state.currentChatId = action.payload.data?._id || null;
             })
             .addCase(generateContent.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+
+            // Generate NEW chat (always new)
+            .addCase(generateNewChatContent.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(generateNewChatContent.fulfilled, (state, action) => {
+                state.loading = false;
+                state.contents.push(action.payload);
+                state.currentChat = action.payload;
+                state.currentChatId = action.payload.data?._id || null;
+            })
+            .addCase(generateNewChatContent.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })

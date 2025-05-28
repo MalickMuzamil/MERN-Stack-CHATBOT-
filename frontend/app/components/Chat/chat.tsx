@@ -1,19 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointUp } from "@fortawesome/free-regular-svg-icons";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import '../../app.css';
 import type { AppDispatch } from '../../../Redux/store/index';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import { faPaperPlane, faPlus, faCode, faLightbulb, faEnvelopeOpenText, } from "@fortawesome/free-solid-svg-icons";
-import { generateContent, fetchContents } from '../../../Redux/features/generatecontent/generatecontent'
+import { generateContent, fetchContents, fetchChatById } from '../../../Redux/features/generatecontent/generatecontent'
 
-export default function chat() {
+type ChatProps = {
+    chatId?: string;
+};
+
+
+export default function Chat({ chatId }: ChatProps) {
     const [message, setMessage] = useState("");
     const [showInitialCards, setShowInitialCards] = useState(true);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
-    const [chatId, setChatId] = useState<string | null>(null);
+    const navigate = useNavigate();
     const [chatHistory, setChatHistory] = useState<{ type: 'user' | 'ai'; message: string }[]>([]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -21,18 +27,16 @@ export default function chat() {
         if (!message.trim()) return;
 
         setLoading(true);
-
         try {
-            setChatHistory((prev) => [...prev, { type: 'user', message }]);
+            setChatHistory(prev => [...prev, { type: 'user', message }]);
 
             const result = await dispatch(generateContent({ prompt: message, chatId })).unwrap();
 
             const { messages: backendMessages, _id } = result.data;
 
-            if (_id && !chatId) setChatId(_id);
             const updatedHistory = backendMessages.map((msg: any) => ({
                 type: msg.sender === "user" ? "user" : "ai",
-                message: msg.content
+                message: msg.content,
             }));
 
             setChatHistory(updatedHistory);
@@ -40,15 +44,20 @@ export default function chat() {
         }
 
         catch (error) {
-            setChatHistory((prev) => [...prev, {
-                type: 'ai',
-                message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`
-            }]);
+            setChatHistory(prev => [
+                ...prev,
+                {
+                    type: 'ai',
+                    message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+                },
+            ]);
         }
 
-        setMessage("");
-        setShowInitialCards(false);
-        setLoading(false);
+        finally {
+            setMessage("");
+            setShowInitialCards(false);
+            setLoading(false);
+        }
     };
 
     const handleFileClick = () => {
@@ -56,6 +65,32 @@ export default function chat() {
             fileInputRef.current.click();
         }
     };
+
+    useEffect(() => {
+        console.log("Chat component useEffect triggered with chatId:", chatId);
+
+        if (chatId) {
+            dispatch(fetchChatById(chatId))
+                .unwrap()
+                .then(result => {
+                    const backendMessages = result.data.messages;
+                    const updatedHistory = backendMessages.map((msg: any) => ({
+                        type: msg.sender === "user" ? "user" : "ai",
+                        message: msg.content,
+                    }));
+                    setChatHistory(updatedHistory);
+                    setShowInitialCards(false);
+                })
+                .catch(() => {
+                    setChatHistory([{ type: "ai", message: "Failed to load chat" }]);
+                    setShowInitialCards(false);
+                });
+        }
+        else {
+            setChatHistory([]);
+            setShowInitialCards(true);
+        }
+    }, [chatId, dispatch]);
 
 
     return (
@@ -79,7 +114,6 @@ export default function chat() {
                 <div className="flex-1 overflow-auto p-4 bg-[#1a1a1a] mb-4 custom-scrollbar" >
                     {showInitialCards ? (
                         <div className="flex flex-col md:flex-row items-center justify-center h-full gap-4">
-
                             <div className="bg-[#242424] text-white p-4 rounded-xl shadow-lg w-full max-w-md flex items-center gap-3">
                                 <FontAwesomeIcon icon={faCode} className="text-blue-400 w-6 h-6" />
                                 <span>Did you know AI can write code?</span>

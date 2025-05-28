@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../Redux/store/index';
 import { signupUser } from '../../../Redux/features/auth/signupslice';
+import { toast } from 'react-toastify';
 
 export default function SignUp() {
     const dispatch = useDispatch<AppDispatch>();
@@ -52,8 +53,10 @@ export default function SignUp() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!isEmailValid || !isPasswordValid) {
-            alert("Please enter valid email and password (min 6 characters)");
+        if (!isEmailValid || !isPasswordValid) {            
+            toast.error("Please enter a valid email and password (min 6 characters)", {
+                position: "top-right",
+            });
             return;
         }
 

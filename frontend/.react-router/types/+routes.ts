@@ -19,12 +19,17 @@ type Pages = {
   "/home": {
     params: {};
   };
+  "/home/:id": {
+    params: {
+      "id": string;
+    };
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/signup" | "/home";
+    page: "/" | "/signup" | "/home" | "/home/:id";
   };
   "./Authentication/Login/login.tsx": {
     id: "Authentication/Login/login";
@@ -36,10 +41,14 @@ type RouteFiles = {
   };
   "./Layout/ProtectedRoute.tsx": {
     id: "Layout/ProtectedRoute";
-    page: "/" | "/home";
+    page: "/" | "/home" | "/home/:id";
   };
   "./routes/home.tsx": {
     id: "routes/home";
     page: "/home";
+  };
+  "./components/HistoryChat/HistoryChat.tsx": {
+    id: "components/HistoryChat/HistoryChat";
+    page: "/home/:id";
   };
 };

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../Redux/store/index';
 import { loginUser } from '../../../Redux/features/auth/loginslice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 
 export default function login() {
@@ -49,20 +50,27 @@ export default function login() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
+
         if (!isEmailValid || !isPasswordValid) {
-            alert("Please enter valid email and password (min 6 characters)");
+            toast.error("Please enter valid email and password (min 6 characters)", {
+                position: "top-right",
+            });
             return;
         }
 
-        console.log("Submitting:", formData);
-        dispatch(loginUser(formData)).then((result) => {
-            if (loginUser.fulfilled.match(result)) {
-                alert('Login successful!');
-                navigate('/home');
-            }
-        });
+        try {
+            const result = await dispatch(loginUser(formData)).unwrap();
+            toast.success("Login successful!", { position: "top-center" });
+            navigate("/home");
+        } 
+        
+        catch (err: any) {
+            toast.error(err || "Login failed. Please try again.", {
+                position: "top-right",
+            });
+        }
     };
 
     useEffect(() => {
