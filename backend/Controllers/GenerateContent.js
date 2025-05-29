@@ -85,6 +85,7 @@ class GenerateContent extends AuthController {
         res.status(200).json(this.generateResponse(200, "New Chat Created", chat));
     });
 
+
     static getGeneratedContent = asyncHandler(async (req, res) => {
         const { id } = req.params;
 

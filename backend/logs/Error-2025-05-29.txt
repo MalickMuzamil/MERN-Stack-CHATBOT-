@@ -1,1 +1,36 @@
 {"level":"error","message":"400 - Error: Error deleting chat: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"tbl_chat\"","timestamp":"2025-05-29 00:27:14"}
+{"level":"error","message":"400 - Error: Error deleting chat: Cast to ObjectId failed for value \"undefined\" (type string) at path \"_id\" for model \"tbl_chat\"","timestamp":"2025-05-29 13:49:29"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:19:14"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:19:14"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:20:48"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:20:48"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:21:24"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:21:31"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:21:32"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:21:32"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:21:38"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:21:52"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:30:23"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:30:23"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:30:38"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:30:38"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:45:28"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:45:28"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:46:05"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:46:17"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:46:18"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:47:23"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:47:23"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:47:34"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:47:37"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:47:39"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:47:42"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:49:02"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:49:02"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:57:10"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:57:10"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:57:17"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:57:17"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:58:51"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 14:58:51"}
+{"level":"error","message":"400 - Error: Prompt and User ID are required","timestamp":"2025-05-29 15:02:10"}
