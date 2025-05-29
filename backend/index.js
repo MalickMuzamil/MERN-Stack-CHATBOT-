@@ -12,6 +12,7 @@ import { errorHandler } from "./middleware/errorMiddleware.js";
 
 import accessRoute from './Routes/accessRoutes.js'
 import GenerateRoutes from './Routes/GenerateRoutes.js'
+import BlogRoutes from './Routes/BlogRoutes.js'
 
 const port = process.env.PORT || 5000;
 const __filename = fileURLToPath(import.meta.url);
@@ -33,6 +34,7 @@ var jsonParser = bodyParser.json();
 
 app.use("/", accessRoute);
 app.use("/generate-content", GenerateRoutes);
+app.use("/generate-blog", BlogRoutes);
 
 
 
