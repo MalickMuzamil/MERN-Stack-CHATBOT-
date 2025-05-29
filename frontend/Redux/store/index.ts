@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import signupReducer from '../features/auth/signupslice';
-import loginReducer  from '../features/auth/loginslice';
+import loginReducer from '../features/auth/loginslice';
 import generateContent from '../features/generatecontent/generatecontent';
+import BlogContent from '../features/BlogContent/blog';
 
 export const store = configureStore({
   reducer: {
     signup: signupReducer,
     login: loginReducer,
     content: generateContent,
+    blogContent: BlogContent,
   },
 })
 

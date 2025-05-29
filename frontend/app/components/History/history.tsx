@@ -6,18 +6,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../../Redux/store';
 import { fetchContents, setCurrentChatId, resetCurrentChatId, deleteChatById } from '../../../Redux/features/generatecontent/generatecontent';
+import { fetchUserBlogs , deleteBlogChat } from '../../../Redux/features/BlogContent/blog';
 import Modal from '../ui/Modal/modal';
 
 export default function History() {
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
-    const { contents, currentChatId } = useSelector((state: RootState) => state.content);
+    const { contents } = useSelector((state: RootState) => state.content);
+    const blogList = useSelector((state: RootState) => state.blogContent.blogList);
     const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
     const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
+    const userId = localStorage.getItem('userId') || '';
+
     useEffect(() => {
         dispatch(fetchContents());
-    }, [dispatch]);
+        if (userId) {
+            dispatch(fetchUserBlogs(userId));
+        }
+    }, [dispatch, userId]);
+
+    const combinedChats = [...contents, ...blogList];
+
+    const uniqueChats = combinedChats.filter(
+        (chat, index, self) =>
+            index === self.findIndex((c) => (c as any)._id === (chat as any)._id)
+    );
 
     const handleChatClick = (chatId: string) => {
         setActiveChatId(chatId);
@@ -32,14 +46,9 @@ export default function History() {
 
     const handleDeleteChat = (chatId: string) => {
         dispatch(deleteChatById(chatId));
+        dispatch(deleteBlogChat(chatId));
         setMenuOpenId(null);
     };
-
-    const uniqueChats = contents.filter(
-        (chat, index, self) =>
-            index === self.findIndex((c) => (c as any)._id === (chat as any)._id)
-    );
-
 
     return (
         <aside className="w-full md:w-64 bg-[#1a1a1a] md:p-4 py-4 h-full md:border-l border-gray-700 flex flex-col">
@@ -51,7 +60,6 @@ export default function History() {
                 >
                     <FontAwesomeIcon icon={faPlus} /> New
                 </button>
-
             </h2>
 
             <div className="w-full h-px bg-gray-600 my-4"></div>

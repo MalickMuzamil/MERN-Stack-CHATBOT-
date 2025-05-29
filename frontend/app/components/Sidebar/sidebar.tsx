@@ -55,7 +55,8 @@ export default function Sidebar({
                         </div>
                     ) : (
                         <div>
-                            <h2 className="text-xl font-bold mb-6 text-center">Chat Bot AI</h2>
+                            <Link to="/home">
+                                <h2 className="text-xl font-bold mb-6 text-center cursor-pointer">Chat Bot AI</h2></Link>
                             <div className="w-full h-px bg-gray-600 my-4"></div>
 
                             <ul>
@@ -66,17 +67,19 @@ export default function Sidebar({
                                     </li>
                                 </Link>
 
-                                <Link to="/home">
+                                <Link to="/home/new">
                                     <li className="mb-4 hover:bg-[#f86009] p-2 rounded cursor-pointer flex items-center gap-2">
                                         <FontAwesomeIcon icon={faComments} />
                                         Chat AI
                                     </li>
                                 </Link>
 
-                                <li className="mb-4 hover:bg-[#f86009] p-2 rounded cursor-pointer flex items-center gap-2">
-                                    <FontAwesomeIcon icon={faFolderOpen} />
-                                    Projects
-                                </li>
+                                <Link to="/library">
+                                    <li className="mb-4 hover:bg-[#f86009] p-2 rounded cursor-pointer flex items-center gap-2">
+                                        <FontAwesomeIcon icon={faFolderOpen} />
+                                    Library
+                                    </li>
+                                </Link>
 
                                 <li
                                     className="mb-4 hover:bg-[#f86009] p-2 rounded cursor-pointer flex items-center gap-2 block md:hidden"

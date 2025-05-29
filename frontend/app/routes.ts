@@ -8,5 +8,6 @@ export default [
     route("home", "./routes/home.tsx"),        
     route("home/new", "./components/Newchat/Newchat.tsx"),    
     route("home/:id", "./components/HistoryChat/HistoryChat.tsx"),   
+    route("library", "./components/BuiltInPrompts/builtinpropmts.tsx"),   
   ]),
 ];

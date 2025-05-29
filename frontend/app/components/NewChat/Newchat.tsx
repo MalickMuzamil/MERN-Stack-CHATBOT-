@@ -75,8 +75,6 @@ export default function Newchat() {
     return (
 
         <>
-
-
             <div className="flex h-screen bg-gray-100 overflow-hidden">
                 <div className="hidden md:block w-64 bg-[#1a1a1a]">
                     <Sidebar

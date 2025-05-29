@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar/sidebar";
 import Chat from "../components/Chat/chat";
 import History from "../components/History/history";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import NewChatPrompt from '../components/NewChat/Newchat';
+import { useDispatch } from 'react-redux';
+import { fetchContents } from '../../Redux/features/generatecontent/generatecontent';
+import { fetchUserBlogs } from '../../Redux/features/BlogContent/blog';
+import type { AppDispatch } from "Redux/store";
 
 export function meta() {
   return [
@@ -18,7 +20,14 @@ export default function Home() {
   const [showHistoryPanel, setShowHistoryPanel] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { id: chatId } = useParams();
-  console.log("Current chatId from URL:", chatId);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    dispatch(fetchContents());
+    if (userId) dispatch(fetchUserBlogs(userId));
+  }, [dispatch, userId]);
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">

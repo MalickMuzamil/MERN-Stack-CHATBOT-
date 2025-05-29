@@ -19,12 +19,15 @@ type Pages = {
   "/home": {
     params: {};
   };
+  "/home/new": {
+    params: {};
+  };
   "/home/:id": {
     params: {
       "id": string;
     };
   };
-  "/home/new": {
+  "/library": {
     params: {};
   };
 };
@@ -32,7 +35,7 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/signup" | "/home" | "/home/:id" | "/home/new";
+    page: "/" | "/signup" | "/home" | "/home/new" | "/home/:id" | "/library";
   };
   "./Authentication/Login/login.tsx": {
     id: "Authentication/Login/login";
@@ -44,18 +47,22 @@ type RouteFiles = {
   };
   "./Layout/ProtectedRoute.tsx": {
     id: "Layout/ProtectedRoute";
-    page: "/" | "/home" | "/home/:id" | "/home/new";
+    page: "/" | "/home" | "/home/new" | "/home/:id" | "/library";
   };
   "./routes/home.tsx": {
     id: "routes/home";
     page: "/home";
   };
+  "./components/Newchat/Newchat.tsx": {
+    id: "components/Newchat/Newchat";
+    page: "/home/new";
+  };
   "./components/HistoryChat/HistoryChat.tsx": {
     id: "components/HistoryChat/HistoryChat";
     page: "/home/:id";
   };
-  "./components/Newchat/Newchat.tsx": {
-    id: "components/Newchat/Newchat";
-    page: "/home/new";
+  "./components/BuiltInPrompts/builtinpropmts.tsx": {
+    id: "components/BuiltInPrompts/builtinpropmts";
+    page: "/library";
   };
 };
