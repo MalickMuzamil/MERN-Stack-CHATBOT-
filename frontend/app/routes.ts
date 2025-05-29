@@ -6,6 +6,7 @@ export default [
 
   route("", "./Layout/ProtectedRoute.tsx", [
     route("home", "./routes/home.tsx"),        
-    route("home/:id", "./components/HistoryChat/HistoryChat.tsx"),    
+    route("home/new", "./components/Newchat/Newchat.tsx"),    
+    route("home/:id", "./components/HistoryChat/HistoryChat.tsx"),   
   ]),
 ];

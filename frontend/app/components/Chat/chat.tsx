@@ -69,6 +69,8 @@ export default function Chat({ chatId }: ChatProps) {
     useEffect(() => {
         console.log("Chat component useEffect triggered with chatId:", chatId);
 
+        if (!chatId || chatId === "new") return;
+
         if (chatId) {
             dispatch(fetchChatById(chatId))
                 .unwrap()
@@ -111,7 +113,7 @@ export default function Chat({ chatId }: ChatProps) {
                     </button>
 
                 </header>
-                    <div className="w-full h-px bg-gray-600 my-5 mb-4 "></div>
+                <div className="w-full h-px bg-gray-600 my-5 mb-4 "></div>
 
                 <div className="flex-1 overflow-y-auto p-4 bg-[#1a1a1a] mb-4 custom-scrollbar" >
                     {showInitialCards ? (

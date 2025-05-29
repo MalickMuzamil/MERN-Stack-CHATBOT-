@@ -24,12 +24,15 @@ type Pages = {
       "id": string;
     };
   };
+  "/home/new": {
+    params: {};
+  };
 };
 
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/signup" | "/home" | "/home/:id";
+    page: "/" | "/signup" | "/home" | "/home/:id" | "/home/new";
   };
   "./Authentication/Login/login.tsx": {
     id: "Authentication/Login/login";
@@ -41,7 +44,7 @@ type RouteFiles = {
   };
   "./Layout/ProtectedRoute.tsx": {
     id: "Layout/ProtectedRoute";
-    page: "/" | "/home" | "/home/:id";
+    page: "/" | "/home" | "/home/:id" | "/home/new";
   };
   "./routes/home.tsx": {
     id: "routes/home";
@@ -50,5 +53,9 @@ type RouteFiles = {
   "./components/HistoryChat/HistoryChat.tsx": {
     id: "components/HistoryChat/HistoryChat";
     page: "/home/:id";
+  };
+  "./components/Newchat/Newchat.tsx": {
+    id: "components/Newchat/Newchat";
+    page: "/home/new";
   };
 };
