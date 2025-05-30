@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../../Redux/store';
 import { fetchContents, setCurrentChatId, resetCurrentChatId, deleteChatById } from '../../../Redux/features/generatecontent/generatecontent';
-import { fetchUserBlogs , deleteBlogChat } from '../../../Redux/features/BlogContent/blog';
+import { fetchUserBlogs, deleteBlogChat } from '../../../Redux/features/BlogContent/blog';
 import Modal from '../ui/Modal/modal';
 
 export default function History() {
@@ -28,6 +28,7 @@ export default function History() {
 
     const combinedChats = [...contents, ...blogList];
 
+    // Remove duplicate chats by _id
     const uniqueChats = combinedChats.filter(
         (chat, index, self) =>
             index === self.findIndex((c) => (c as any)._id === (chat as any)._id)
@@ -66,49 +67,51 @@ export default function History() {
 
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
                 <ul>
-                    {uniqueChats.map((chat: any) => (
-                        <li
-                            key={chat._id}
-                            className={`mb-4 p-2 rounded cursor-pointer flex items-start justify-between gap-2 text-white hover:bg-[#333]  ${activeChatId === chat._id ? "bg-[#f86009]" : ""
-                                }`}
-                        >
-                            <div
-                                className={`flex-1 flex gap-2 items-center cursor-pointer`}
-                                onClick={() => handleChatClick(chat._id)}
+                    {uniqueChats.map((chat: any) => {
+                        const firstMessage = chat.messages && chat.messages.length > 0 ? chat.messages[0].content : null;
+                        const displayTitle = firstMessage && firstMessage.trim() !== ""
+                            ? (firstMessage.length > 20 ? firstMessage.substring(0, 20) + "..." : firstMessage)
+                            : chat.prompt && chat.prompt.trim() !== ""
+                            ? (chat.prompt.length > 20 ? chat.prompt.substring(0, 20) + "..." : chat.prompt)
+                            : "Untitled Chat";
+
+                        return (
+                            <li
+                                key={chat._id}
+                                className={`mb-4 p-2 rounded cursor-pointer flex items-start justify-between gap-2 text-white hover:bg-[#333]  ${activeChatId === chat._id ? "bg-[#f86009]" : ""}`}
                             >
-                                <FontAwesomeIcon icon={faCommentDots} className="w-4 h-4" />
-                                <span>
-                                    {chat.messages?.[0]?.content
-                                        ? chat.messages[0].content.substring(0, 20) +
-                                        (chat.messages[0].content.length > 20 ? "..." : "")
-                                        : "Untitled Chat"}
-                                </span>
-                            </div>
-
-                            <div className="relative">
-                                <button
-                                    onClick={() =>
-                                        setMenuOpenId(menuOpenId === chat._id ? null : chat._id)
-                                    }
+                                <div
+                                    className="flex-1 flex gap-2 items-center cursor-pointer"
+                                    onClick={() => handleChatClick(chat._id)}
                                 >
-                                    <FontAwesomeIcon icon={faEllipsisV} className="w-4 h-4 cursor-pointer" />
-                                </button>
+                                    <FontAwesomeIcon icon={faCommentDots} className="w-4 h-4" />
+                                    <span>{displayTitle}</span>
+                                </div>
 
-                                {menuOpenId === chat._id && (
-                                    <div className="absolute right-0 mt-2 w-28 bg-[#2a2a2a] border border-gray-600 rounded shadow-lg z-10 cursor-pointer">
-                                        <Modal
-                                            title="Delete Chat"
-                                            message="Are you sure you want to delete this chat?"
-                                            onConfirm={() => handleDeleteChat(chat._id)}
-                                            triggerLabel="Delete"
-                                            icon={<FontAwesomeIcon icon={faTrash} />}
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </li>
-                    ))}
+                                <div className="relative">
+                                    <button
+                                        onClick={() =>
+                                            setMenuOpenId(menuOpenId === chat._id ? null : chat._id)
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faEllipsisV} className="w-4 h-4 cursor-pointer" />
+                                    </button>
 
+                                    {menuOpenId === chat._id && (
+                                        <div className="absolute right-0 mt-2 w-28 bg-[#2a2a2a] border border-gray-600 rounded shadow-lg z-10 cursor-pointer">
+                                            <Modal
+                                                title="Delete Chat"
+                                                message="Are you sure you want to delete this chat?"
+                                                onConfirm={() => handleDeleteChat(chat._id)}
+                                                triggerLabel="Delete"
+                                                icon={<FontAwesomeIcon icon={faTrash} />}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
         </aside>

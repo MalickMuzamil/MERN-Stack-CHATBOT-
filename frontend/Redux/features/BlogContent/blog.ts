@@ -3,10 +3,30 @@ import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
+interface Message {
+    sender: 'user' | 'ai';
+    content: string;
+}
+
+interface BlogChat {
+    _id: string;
+    userId: string;
+    prompt: string;
+    messages: Message[];
+    updatedAt?: string;
+}
+
+interface ResponseData {
+    chatId: string;
+    isFinal: boolean;
+    aiMessage: string;
+    conversation: Message[];
+}
+
 interface PromptState {
     selectedPrompt: string;
-    responseData: any;
-    blogList: any[];
+    responseData: ResponseData | null;
+    blogList: BlogChat[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
@@ -19,7 +39,6 @@ const initialState: PromptState = {
     error: null,
 };
 
-// Thunk: Post new blog prompt
 export const postPrompt = createAsyncThunk(
     'prompt/postPrompt',
     async (promptText: string, thunkAPI) => {
@@ -70,7 +89,6 @@ export const postFollowUp = createAsyncThunk(
     }
 );
 
-// Thunk: Fetch all blog chats for a user
 export const fetchUserBlogs = createAsyncThunk(
     'prompt/fetchUserBlogs',
     async (userId: string, thunkAPI) => {
@@ -81,7 +99,13 @@ export const fetchUserBlogs = createAsyncThunk(
                     Authorization: `Bearer ${token}`,
                 },
             });
-            return response.data;
+
+            const combinedMessages = response.data.flatMap((chat: BlogChat) => chat.messages);
+
+            return {
+                originalChats: response.data,
+                combinedMessages,
+            };
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
         }
@@ -93,19 +117,18 @@ export const deleteBlogChat = createAsyncThunk(
     async (chatId: string, thunkAPI) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.delete(`${BASE_URL}/generate-blog/blogs/${chatId}`, {
+            await axios.delete(`${BASE_URL}/generate-blog/blogs/${chatId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            return chatId;  // return deleted chatId so we can remove it locally
+            return chatId;
         } catch (error: any) {
             return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
         }
     }
 );
 
-// Slice
 const promptSlice = createSlice({
     name: 'prompt',
     initialState,
@@ -122,7 +145,6 @@ const promptSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // postPrompt
             .addCase(postPrompt.pending, (state, action) => {
                 state.status = 'loading';
                 state.selectedPrompt = action.meta.arg;
@@ -139,23 +161,42 @@ const promptSlice = createSlice({
                 state.error = action.payload as string;
             })
 
-            // fetchUserBlogs
+            .addCase(postFollowUp.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(postFollowUp.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.responseData = action.payload;
+                state.error = null;
+            })
+            .addCase(postFollowUp.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload as string;
+            })
+
             .addCase(fetchUserBlogs.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
             })
             .addCase(fetchUserBlogs.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.blogList = action.payload;
+                state.blogList = action.payload.originalChats;
+                state.responseData = {
+                    chatId: '',
+                    isFinal: false,
+                    aiMessage: '',
+                    conversation: action.payload.combinedMessages,
+                };
                 state.error = null;
             })
             .addCase(fetchUserBlogs.rejected, (state, action) => {
                 state.status = 'failed';
                 state.blogList = [];
+                state.responseData = null;
                 state.error = action.payload as string;
             })
 
-            // deleteBlogChat
             .addCase(deleteBlogChat.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
