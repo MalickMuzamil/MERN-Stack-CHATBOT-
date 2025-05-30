@@ -85,7 +85,16 @@ class BlogController extends AuthController {
 
         const chats = await BlogModel.find({ userId }).sort({ updatedAt: -1 });
 
-        res.status(200).json(chats);
+        const allMessages = chats.reduce((acc, chat) => {
+            return acc.concat(chat.messages);
+        }, []);
+
+        res.status(200).json({
+            status: 200,
+            userId,
+            totalMessages: allMessages.length,
+            messages: allMessages,
+        });
     });
 
     static deleteChat = asyncHandler(async (req, res) => {
