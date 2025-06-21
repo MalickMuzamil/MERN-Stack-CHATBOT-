@@ -42,8 +42,6 @@ MERN-Stack-CHATBOT/
 - 🛠️ Optional **TypeScript** support for type-safe code
 
 ### ▶️ Getting Started (Frontend)
-
-```bash
 cd frontend
 npm install
 npm run dev        # Start development server
