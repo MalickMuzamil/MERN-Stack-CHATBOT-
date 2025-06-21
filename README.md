@@ -90,7 +90,7 @@ Feel free to integrate your preferred CSS framework or custom styles as needed.
 📬 Contact Me
 Have suggestions, feedback, or want to collaborate?
 
-<!--📧 Email: malikmuzamil92110@example.com 💼 LinkedIn: linkedin.com/in/malik-muzamil -->
+<!-- 📧 Email: malikmuzamil92110@example.com 💼 LinkedIn: linkedin.com/in/malik-muzamil -->
 
 Built with ❤️ by Muzamil where code meets creativity.
 
