@@ -60,25 +60,21 @@ A robust backend setup with Express and Mongoose.
 
 🌐 CORS enabled for cross-origin support
 
-🗃️ MongoDB integration using Mongoose
+## 🗃️ MongoDB integration using Mongoose
 
-▶️ Getting Started (Backend)
-bash
-Copy
-Edit
+## ▶️ Getting Started (Backend)
 cd backend
 npm install
 node server.js      # Start the backend server
 🎨 Styling
+
+
 This template comes pre-configured with Tailwind CSS.
+
+
 Feel free to integrate your preferred CSS framework or custom styles as needed.
 
 “Design is not just what it looks like and feels like. Design is how it works.” — Steve Jobs
-
-📷 UI Preview (Add Your Screenshot Here)
-Chat UI	Admin Panel
-
-Replace the image URLs with real screenshots once the UI is ready!
 
 🙌 Built With
 💻 React
@@ -94,17 +90,16 @@ Replace the image URLs with real screenshots once the UI is ready!
 📬 Contact Me
 Have suggestions, feedback, or want to collaborate?
 
+<!--
+
 📧 Email: malikmuzamil92110@example.com
 
 💼 LinkedIn: linkedin.com/in/malik-muzamil
 
-Built with ❤️ by Muzamil — where code meets creativity.
+-->
 
-yaml
-Copy
-Edit
+Built with ❤️ by Muzamil where code meets creativity.
 
----
 
 ### ✅ Pro Tips:
 - Add badges for **license**, **deployment**, or **contributors** if needed.
