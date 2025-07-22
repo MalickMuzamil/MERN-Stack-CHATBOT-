@@ -14,16 +14,27 @@ A full-stack **chatbot application** built with the powerful **MERN** stack —
 
 MERN-Stack-CHATBOT/
 │
+
 ├── backend/ # Express.js server + MongoDB
+
 │ ├── models/ # Mongoose models
+
 │ ├── routes/ # API routes
+
 │ └── server.js # Entry point
+
 │
+
 ├── frontend/ # React + Vite app
+
 │ ├── src/ # Components, pages, and routes
+
 │ ├── public/ # Static assets
+
 │ └── index.html
+
 │
+
 └── README.md
 
 
@@ -49,7 +60,9 @@ npm run build      # Build for production
 🛠️ Backend — Express + MongoDB
 A robust backend setup with Express and Mongoose.
 
-✨ Features
+---
+
+### ✨ Features
 🔌 RESTful API structure
 
 🔐 .env support via dotenv for secure configuration
@@ -59,6 +72,9 @@ A robust backend setup with Express and Mongoose.
 🌐 CORS enabled for cross-origin support
 
 ## 🗃️ MongoDB integration using Mongoose
+
+
+---
 
 ## ▶️ Getting Started (Backend)
 cd backend
@@ -88,11 +104,12 @@ Feel free to integrate your preferred CSS framework or custom styles as needed.
 📬 Contact Me
 Have suggestions, feedback, or want to collaborate?
 
-<!-- 📧 Email: malikmuzamil92110@example.com | 💼 LinkedIn: linkedin.com/in/malik-muzamil -->
+📧 Email: malikmuzamil92110@example.com | 💼 LinkedIn: linkedin.com/in/malik-muzamil
 
 
 Built with ❤️ by Muzamil where code meets creativity.
 
+---
 
 ### ✅ Pro Tips:
 - Add badges for **license**, **deployment**, or **contributors** if needed.
