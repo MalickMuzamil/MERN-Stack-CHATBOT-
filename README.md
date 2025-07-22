@@ -5,7 +5,7 @@
 ![Node](https://img.shields.io/badge/Backend-Node%2BExpress%2BMongoDB-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Under_Development-yellow?style=for-the-badge)
 
-A full-stack **chatbot application** built with the powerful **MERN** stack —  
+A full-stack **chatbot application** built with the powerful **MERN** stack 
 **MongoDB**, **Express**, **React**, and **Node.js**.
 
 ---
@@ -13,6 +13,7 @@ A full-stack **chatbot application** built with the powerful **MERN** stack —
 ## 📁 Project Structure
 
 MERN-Stack-CHATBOT/
+
 │
 
 ├── backend/ # Express.js server + MongoDB
@@ -40,7 +41,7 @@ MERN-Stack-CHATBOT/
 
 ---
 
-## 🚀 Frontend — React + Vite + Tailwind
+## 🚀 Frontend React + Vite + Tailwind
 
 > A modern and fast frontend setup using **React Router**, **TailwindCSS**, and **Vite**.
 
